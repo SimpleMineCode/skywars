@@ -4,3 +4,6 @@ api-version: 1.13
 author: SMCode
 website: https://smcode.io
 main: io.smcode.skywars.SkyWarsPlugin
+
+commands:
+  skywars:
