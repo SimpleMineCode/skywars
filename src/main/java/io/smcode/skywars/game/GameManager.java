@@ -5,8 +5,8 @@ import org.bukkit.Location;
 import org.bukkit.configuration.ConfigurationSection;
 
 import java.util.HashSet;
+import java.util.Optional;
 import java.util.Set;
-import java.util.UUID;
 
 public class GameManager {
     private final Set<Game> games = new HashSet<>();
@@ -16,15 +16,26 @@ public class GameManager {
         this.plugin = plugin;
     }
 
-    public Game createNewGame(Location lobby, GameSettings settings) {
-        final Game game =  new Game(UUID.randomUUID(), settings);
+    public Optional<Game> getGame(String name) {
+        return games.stream().filter(game -> game.getName().equals(name)).findFirst();
+    }
+
+    public Game createNewGame(Location lobby, String name, GameSettings settings) {
+        final Game game =  new Game(name, settings);
         game.getLocations().setLobby(lobby);
+        this.games.add(game);
         saveGameToConfig(game);
         return game;
     }
 
-    public Game createNewGame(Location lobby) {
-        return createNewGame(lobby, GameSettings.DEFAULT_SETTINGS);
+    public Game createNewGame(Location lobby, String name) {
+        return createNewGame(lobby, name, GameSettings.DEFAULT_SETTINGS);
+    }
+
+    public void saveGames() {
+        for (Game game : games) {
+            saveGameToConfig(game);
+        }
     }
 
     private void saveGameToConfig(Game game) {

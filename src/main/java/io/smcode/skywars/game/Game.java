@@ -9,17 +9,20 @@ import java.util.Set;
 import java.util.UUID;
 
 public class Game implements ConfigurationSerializable {
-    private final UUID id;
+    private UUID id;
+    private final String name;
     private final GameSettings settings;
     private final Set<GamePlayers> players = new HashSet<>();
-    private GameLocations locations;
+    private GameLocations locations = new GameLocations();
 
-    Game(UUID id, GameSettings settings) {
-        this.id = id;
+    Game(String name, GameSettings settings) {
+        this.id = UUID.randomUUID();
+        this.name = name;
         this.settings = settings;
-        this.locations = new GameLocations();
-        System.out.println(1);
-        System.out.println(getLocations());
+    }
+
+    public String getName() {
+        return name;
     }
 
     public void setLocations(GameLocations locations) {
@@ -28,6 +31,10 @@ public class Game implements ConfigurationSerializable {
 
     public GameLocations getLocations() {
         return this.locations;
+    }
+
+    public void setId(UUID id) {
+        this.id = id;
     }
 
     public UUID getId() {
@@ -43,12 +50,12 @@ public class Game implements ConfigurationSerializable {
     }
 
     public static Game deserialize(Map<String, Object> data) {
-        System.out.println("calling deserialize");
         final Game game =  new Game(
-                UUID.fromString((String) data.get("id")),
+                (String) data.get("Name"),
                 (GameSettings) data.get("Game-Settings")
         );
 
+        game.setId(UUID.fromString((String) data.get("Id")));
         game.setLocations((GameLocations) data.get("Locations"));
 
         return game;
@@ -56,9 +63,9 @@ public class Game implements ConfigurationSerializable {
 
     @Override
     public @NotNull Map<String, Object> serialize() {
-        System.out.println(getLocations());
         return Map.of(
-                "id", getId().toString(),
+                "Id", getId().toString(),
+                "Name", getName(),
                 "Game-Settings", getSettings(),
                 "Locations", getLocations()
         );

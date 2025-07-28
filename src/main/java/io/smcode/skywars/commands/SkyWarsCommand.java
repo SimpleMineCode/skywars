@@ -1,6 +1,7 @@
 package io.smcode.skywars.commands;
 
 import io.smcode.skywars.commands.arguments.CreateGameArgument;
+import io.smcode.skywars.commands.arguments.SetTeamLocationArgument;
 import io.smcode.skywars.config.Message;
 import io.smcode.skywars.config.Messages;
 import io.smcode.skywars.game.GameManager;
@@ -8,9 +9,11 @@ import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.TabExecutor;
 import org.bukkit.entity.Player;
+import org.bukkit.util.StringUtil;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -24,6 +27,7 @@ public class SkyWarsCommand implements TabExecutor {
     public SkyWarsCommand(GameManager manager, Messages messages) {
         this.messages = messages;
         arguments.put("create", new CreateGameArgument(messages, manager));
+        arguments.put("spawn", new SetTeamLocationArgument(manager, messages));
     }
 
     @Override
@@ -59,6 +63,11 @@ public class SkyWarsCommand implements TabExecutor {
 
     @Override
     public @Nullable List<String> onTabComplete(@NotNull CommandSender sender, @NotNull Command command, @NotNull String s, @NotNull String @NotNull [] args) {
+        if (args.length == 1) {
+            final List<String> validArguments = new ArrayList<>();
+            StringUtil.copyPartialMatches(args[0], arguments.keySet(), validArguments);
+            return validArguments;
+        }
         return List.of();
     }
 }

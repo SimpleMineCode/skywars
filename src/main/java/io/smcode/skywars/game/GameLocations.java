@@ -6,6 +6,7 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 public class GameLocations implements ConfigurationSerializable {
     private Location lobby;
@@ -30,10 +31,11 @@ public class GameLocations implements ConfigurationSerializable {
     public static GameLocations deserialize(Map<String, Object> data) {
         final GameLocations locations = new GameLocations();
         locations.setLobby((Location) data.get("Lobby"));
-        final Map<GameTeam, Location> spawns = (Map<GameTeam, Location>) data.get("Spawns");
+        final Map<String, Location> spawns = (Map<String, Location>) data.get("Spawns");
 
-        for (GameTeam team : spawns.keySet()) {
-            locations.setSpawn(team, spawns.get(team));
+        for (String teamString : spawns.keySet()) {
+            final GameTeam team = GameTeam.valueOf(teamString);
+            locations.setSpawn(team, spawns.get(teamString));
         }
 
         return locations;
@@ -41,9 +43,15 @@ public class GameLocations implements ConfigurationSerializable {
 
     @Override
     public @NotNull Map<String, Object> serialize() {
+        final Map<String, Location> spawns = new HashMap<>();
+
+        for (GameTeam team : getSpawns().keySet()) {
+            spawns.put(team.name(), getSpawns().get(team));
+        }
+
         return Map.of(
                 "Lobby", getLobby(),
-                "Spawns", getSpawns()
+                "Spawns", spawns
         );
     }
 }
