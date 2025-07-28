@@ -1,10 +1,9 @@
 package io.smcode.skywars.commands;
 
+import io.smcode.skywars.commands.arguments.CreateGameArgument;
 import io.smcode.skywars.config.Message;
 import io.smcode.skywars.config.Messages;
 import io.smcode.skywars.game.GameManager;
-import net.kyori.adventure.text.Component;
-import net.kyori.adventure.text.format.NamedTextColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.TabExecutor;
@@ -12,15 +11,19 @@ import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class SkyWarsCommand implements TabExecutor {
-    private final GameManager manager;
+    private static final Map<String, ArgumentExecutor> arguments = new HashMap<>();
+    private static final String helpFormat = "<blue>/skywars %s <gray> - %s";
+
     private final Messages messages;
 
     public SkyWarsCommand(GameManager manager, Messages messages) {
-        this.manager = manager;
         this.messages = messages;
+        arguments.put("create", new CreateGameArgument(messages, manager));
     }
 
     @Override
@@ -30,10 +33,28 @@ public class SkyWarsCommand implements TabExecutor {
             return true;
         }
 
-        manager.createNewGame();
-        player.sendMessage(Component.text("New game successfully created", NamedTextColor.GREEN));
+        if (args.length == 0) {
+            sendHelp(player);
+            return true;
+        }
+
+        final String argument = args[0].toLowerCase();
+        final ArgumentExecutor argumentExecutor = arguments.get(argument);
+
+        if (argumentExecutor == null) {
+            sendHelp(player);
+            return true;
+        }
+
+        argumentExecutor.execute(player, args);
 
         return true;
+    }
+
+    private void sendHelp(Player player) {
+        for (ArgumentExecutor argument : arguments.values()) {
+            player.sendRichMessage(helpFormat.formatted(argument.getUsage(), argument.getDescription()));
+        }
     }
 
     @Override

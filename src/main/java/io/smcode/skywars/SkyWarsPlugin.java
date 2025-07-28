@@ -3,6 +3,7 @@ package io.smcode.skywars;
 import io.smcode.skywars.commands.SkyWarsCommand;
 import io.smcode.skywars.config.Messages;
 import io.smcode.skywars.game.Game;
+import io.smcode.skywars.game.GameLocations;
 import io.smcode.skywars.game.GameManager;
 import io.smcode.skywars.game.GameSettings;
 import org.bukkit.configuration.serialization.ConfigurationSerialization;
@@ -13,6 +14,7 @@ import java.io.File;
 public class SkyWarsPlugin extends JavaPlugin {
     @Override
     public void onLoad() {
+        ConfigurationSerialization.registerClass(GameLocations.class);
         ConfigurationSerialization.registerClass(GameSettings.class);
         ConfigurationSerialization.registerClass(Game.class);
 

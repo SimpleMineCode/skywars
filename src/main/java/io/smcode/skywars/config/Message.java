@@ -1,7 +1,8 @@
 package io.smcode.skywars.config;
 
 public enum Message {
-    COMMAND_ONLY_FOR_PLAYERS("Command-Only-For-Players");
+    COMMAND_ONLY_FOR_PLAYERS("Command-Only-For-Players"),
+    GAME_CREATED("Game-Created");
 
     private final String path;
 

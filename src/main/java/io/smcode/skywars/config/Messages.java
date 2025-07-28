@@ -2,6 +2,7 @@ package io.smcode.skywars.config;
 
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.minimessage.MiniMessage;
+import net.kyori.adventure.text.minimessage.tag.resolver.TagResolver;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 
@@ -30,7 +31,7 @@ public class Messages {
         final String prefix = this.config.getString("Prefix");
 
         if (prefix != null)
-            this.prefix = mm.deserialize(prefix.trim());
+            this.prefix = mm.deserialize(prefix.trim()).appendSpace();
 
         try {
             this.config.save(file);
@@ -40,11 +41,19 @@ public class Messages {
     }
 
     public Component getMessage(Message message) {
+        return getMessage(message, TagResolver.empty());
+    }
+
+    public Component getMessage(Message message, TagResolver... placeholders) {
         final String messageString =  this.config.getString(message.getPath());
 
         if (messageString == null)
             return notFound;
 
-        return prefix.appendSpace().append(mm.deserialize(messageString));
+        return prefix.append(mm.deserialize(messageString, TagResolver.resolver(placeholders)));
+    }
+
+    public Component getPrefix() {
+        return prefix;
     }
 }

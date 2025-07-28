@@ -22,7 +22,7 @@
                 <version>3.4.1</version>
                 <configuration>
                     <outputDirectory>${user.home}/Server/plugins</outputDirectory>
-                    <finalName>SkyWars.java</finalName>
+                    <finalName>SkyWars</finalName>
                 </configuration>
             </plugin>
         </plugins>
