@@ -2,10 +2,10 @@ package io.smcode.skywars.game;
 
 import org.bukkit.entity.Player;
 
-public class GamePlayers {
+public class GamePlayer {
     private final Player player;
 
-    public GamePlayers(Player player) {
+    public GamePlayer(Player player) {
         this.player = player;
     }
 

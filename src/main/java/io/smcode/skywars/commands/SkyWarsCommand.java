@@ -1,6 +1,7 @@
 package io.smcode.skywars.commands;
 
 import io.smcode.skywars.commands.arguments.CreateGameArgument;
+import io.smcode.skywars.commands.arguments.JoinGameArgument;
 import io.smcode.skywars.commands.arguments.SetTeamLocationArgument;
 import io.smcode.skywars.config.Message;
 import io.smcode.skywars.config.Messages;
@@ -28,6 +29,7 @@ public class SkyWarsCommand implements TabExecutor {
         this.messages = messages;
         arguments.put("create", new CreateGameArgument(messages, manager));
         arguments.put("spawn", new SetTeamLocationArgument(manager, messages));
+        arguments.put("join", new JoinGameArgument(manager, messages));
     }
 
     @Override

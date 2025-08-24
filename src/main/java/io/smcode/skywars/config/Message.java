@@ -1,6 +1,10 @@
 package io.smcode.skywars.config;
 
 public enum Message {
+    GAME_FULL("Game-Full"),
+    GAME_NOT_JOINABLE("Game-Not-Joinable"),
+    GAME_JOINED("Game-Join-Message"),
+    GAME_LEFT("Game-Leave-Message"),
     COMMAND_ONLY_FOR_PLAYERS("Command-Only-For-Players"),
     GAME_CREATED("Game-Created"),
     ENTITY_NOT_FOUND("Entity-Not-Found"),

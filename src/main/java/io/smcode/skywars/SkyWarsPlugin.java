@@ -6,6 +6,7 @@ import io.smcode.skywars.game.Game;
 import io.smcode.skywars.game.GameLocations;
 import io.smcode.skywars.game.GameManager;
 import io.smcode.skywars.game.GameSettings;
+import io.smcode.skywars.listeners.GameListener;
 import org.bukkit.configuration.serialization.ConfigurationSerialization;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -30,6 +31,7 @@ public class SkyWarsPlugin extends JavaPlugin {
         manager.loadGames();
 
         getCommand("skywars").setExecutor(new SkyWarsCommand(manager, messages));
+        getServer().getPluginManager().registerEvents(new GameListener(messages, manager), this);
     }
 
     @Override

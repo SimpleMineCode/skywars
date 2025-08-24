@@ -3,6 +3,7 @@ package io.smcode.skywars.game;
 import io.smcode.skywars.SkyWarsPlugin;
 import org.bukkit.Location;
 import org.bukkit.configuration.ConfigurationSection;
+import org.bukkit.entity.Player;
 
 import java.util.HashSet;
 import java.util.Optional;
@@ -18,6 +19,16 @@ public class GameManager {
 
     public Optional<Game> getGame(String name) {
         return games.stream().filter(game -> game.getName().equals(name)).findFirst();
+    }
+
+    public void joinGame(Game game, Player player) {
+        game.join(player);
+    }
+
+    public void leaveGame(Player player) {
+        for (Game game : games) {
+            game.leave(player);
+        }
     }
 
     public Game createNewGame(Location lobby, String name, GameSettings settings) {
